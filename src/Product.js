@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {useParams,Link} from 'react-router-dom';
 
 const Product = (props) => {
     const products = props.products;

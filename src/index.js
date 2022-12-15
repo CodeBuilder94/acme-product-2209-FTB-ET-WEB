@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client';
 import React, { useState, useEffect } from 'react';
-import {useLocation, useParams, HashRouter, Routes, Route, Link} from 'react-router-dom';
+import {useLocation, HashRouter, Routes, Route, Link} from 'react-router-dom';
 import Products from './Products';
 import Product from './Product';
 //import Nav from './Nav';
@@ -13,7 +13,7 @@ const Nav = (props) =>
 
  return <nav>
         <Link to='/home' className={pathname === '/' ?"Selected" :""}>Home</Link>
-        <Link to ='/products' className={pathname.startswith('/products') ?"Selected" :""}>Products ({products.length})</Link>
+        <Link to ='/products' className={pathname.startsWith('/products') ?"Selected" :""}>Products ({products.length})</Link>
     </nav>
 }
 
