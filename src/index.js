@@ -20,10 +20,12 @@ const Nav = (props) =>
 const App = ()=> {
   
   const [products, setProducts] = useState([]);
+
   const [registerUsername, setRegisterUsername] = useState('');
   const [registerPassword, setRegisterPassword] = useState('');
   const [loginUsername, setLoginUsername] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const [user, setUser] =useState({});
 
   const register = (ev) =>
   {
@@ -49,7 +51,7 @@ const App = ()=> {
   const logIn = (ev) =>
   {
     ev.preventDefault();
-        fetch('https://strangers-things.herokuapp.com/api/COHORT-NAME/users/login', {
+        fetch('https://strangers-things.herokuapp.com/api/2209-FBT-ET-WEB-AM/users/login', {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -63,9 +65,22 @@ const App = ()=> {
     }).then(response => response.json())
       .then(result => {
         const token = result.data.token;
-        console.log(result);
-      })
-      .catch(err => console.log());
+        
+          fetch('https://strangers-things.herokuapp.com/api/2209-FBT-ET-WEB-AM/users/me', {
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+            },
+          }).then(response => response.json())
+          .then(result => {
+            const user = result.data;
+            setUser(user);
+            console.log(result);
+          })
+          .catch(console.error);
+
+          })
+      .catch(err => console.log(err));
 
   }
 
@@ -78,16 +93,24 @@ const App = ()=> {
   return (
     <div>
       <h1>React Client Template. Now with Authentication!</h1>
-      <form onSubmit = {register}>
-        <input placeholder="username" value = {registerUsername} onChange ={ev => setRegisterUsername(ev.target.value)}></input>
-        <input placeholder="password" value = {registerPassword} onChange ={ev => setRegisterPassword(ev.target.value)}></input>
-        <button>Register</button>
-      </form>
-      <form onSubmit = {logIn}>
-        <input placeholder="username" value = {loginUsername} onChange ={ev => setLoginUsername(ev.target.value)}></input>
-        <input placeholder="password" value = {loginPassword} onChange ={ev => setLoginPasword(ev.target.value)}></input>
-        <button>Login</button>
-      </form>
+      {
+        user._id ? <div>Welcome {user.username}!</div>:null
+      }
+      { 
+      
+        !user._id ? <div>
+          <form onSubmit = {register}>
+            <input placeholder="username" value = {registerUsername} onChange ={ev => setRegisterUsername(ev.target.value)}></input>
+            <input placeholder="password" value = {registerPassword} onChange ={ev => setRegisterPassword(ev.target.value)}></input>
+            <button>Register</button>
+          </form>
+          <form onSubmit = {logIn}>
+            <input placeholder="username" value = {loginUsername} onChange ={ev => setLoginUsername(ev.target.value)}></input>
+            <input placeholder="password" value = {loginPassword} onChange ={ev => setLoginPassword(ev.target.value)}></input>
+            <button>Login</button>
+          </form>
+        </div> :null
+        }
       <Routes>
         <Route path='/*' element ={
           <Nav products={products}/>
