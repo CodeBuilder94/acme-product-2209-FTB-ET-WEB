@@ -20,6 +20,54 @@ const Nav = (props) =>
 const App = ()=> {
   
   const [products, setProducts] = useState([]);
+  const [registerUsername, setRegisterUsername] = useState('');
+  const [registerPassword, setRegisterPassword] = useState('');
+  const [loginUsername, setLoginUsername] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+
+  const register = (ev) =>
+  {
+    ev.preventDefault();
+      fetch('https://strangers-things.herokuapp.com/api/2209-FBT-ET-WEB-AM/users/register', {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      user: {
+        username: registerUsername,
+        password: registerPassword
+      }
+    })
+  }).then(response => response.json())
+    .then(result => {
+      console.log(result);
+    })
+    .catch(err => console.log(err));
+  }
+
+  const logIn = (ev) =>
+  {
+    ev.preventDefault();
+        fetch('https://strangers-things.herokuapp.com/api/COHORT-NAME/users/login', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user: {
+          username: loginUsername,
+          password: loginPassword
+        }
+      })
+    }).then(response => response.json())
+      .then(result => {
+        const token = result.data.token;
+        console.log(result);
+      })
+      .catch(err => console.log());
+
+  }
 
   useEffect(() =>{
     fetch('https://www.acme-api.com/api/products')
@@ -29,7 +77,17 @@ const App = ()=> {
 
   return (
     <div>
-      <h1>React Client Template</h1>
+      <h1>React Client Template. Now with Authentication!</h1>
+      <form onSubmit = {register}>
+        <input placeholder="username" value = {registerUsername} onChange ={ev => setRegisterUsername(ev.target.value)}></input>
+        <input placeholder="password" value = {registerPassword} onChange ={ev => setRegisterPassword(ev.target.value)}></input>
+        <button>Register</button>
+      </form>
+      <form onSubmit = {logIn}>
+        <input placeholder="username" value = {loginUsername} onChange ={ev => setLoginUsername(ev.target.value)}></input>
+        <input placeholder="password" value = {loginPassword} onChange ={ev => setLoginPasword(ev.target.value)}></input>
+        <button>Login</button>
+      </form>
       <Routes>
         <Route path='/*' element ={
           <Nav products={products}/>

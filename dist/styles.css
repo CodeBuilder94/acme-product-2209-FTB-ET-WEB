@@ -14,3 +14,16 @@ nav a{
 nav a.selected{
   border: solid 2px palegreen;
 }
+
+form{
+  display: flex;
+  flex-direction: column;
+}
+
+input, button{
+  height:2rem;
+}
+
+form > * {
+  margin:0.5rem;
+}
