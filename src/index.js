@@ -65,7 +65,7 @@ const App = ()=> {
     }).then(response => response.json())
       .then(result => {
         const token = result.data.token;
-        
+        window.localStorage.setItem("token", token); //how to save token to local stroage in browser so the user is not logged out when they refresh.
           fetch('https://strangers-things.herokuapp.com/api/2209-FBT-ET-WEB-AM/users/me', {
             headers: {
             'Content-Type': 'application/json',
@@ -90,11 +90,36 @@ const App = ()=> {
     .then(json => setProducts(json))
   },[])
 
+  useEffect(()=>{
+    const token = window.localStorage.getItem('token');
+    if(token)
+    {
+          fetch('https://strangers-things.herokuapp.com/api//2209-FBT-ET-WEB-AM/users/me', {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+    }).then(response => response.json())
+      .then(result => {
+        const user = result.data;
+        setUser(user);
+        console.log(result);
+      })
+      .catch(err => console.log(err));
+        }
+  },[])
+
+  const logout = () =>{
+    window.localStorage.removeItem('token');
+    setUser({});
+  }
+
+
   return (
     <div>
       <h1>React Client Template. Now with Authentication!</h1>
       {
-        user._id ? <div>Welcome {user.username}!</div>:null
+        user._id ? <div>Welcome {user.username}! <button onClick={logout}>LogOut</button></div>:null
       }
       { 
       
