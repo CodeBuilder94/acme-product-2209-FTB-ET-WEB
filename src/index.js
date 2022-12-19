@@ -97,8 +97,8 @@ const App = ()=> {
     .then(json => setProducts(json))
   },[])
 
-  useEffect(()=>{
-    const token = window.localStorage.getItem('token');
+const exchangeTokenForUser = () =>{
+  const token = window.localStorage.getItem('token');
     if(token)
     {
           fetch('https://strangers-things.herokuapp.com/api//2209-FBT-ET-WEB-AM/users/me', {
@@ -114,6 +114,10 @@ const App = ()=> {
       })
       .catch(err => console.log(err));
         }
+}
+
+  useEffect(()=>{
+    exchangeTokenForUser();
   },[])
 
   const logout = () =>{
