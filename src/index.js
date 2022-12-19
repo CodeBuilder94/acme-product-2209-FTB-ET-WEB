@@ -44,6 +44,10 @@ const App = ()=> {
   }).then(response => response.json())
     .then(result => {
       console.log(result);
+      if(!result.success)
+      {
+        throw result.error;
+      }
     })
     .catch(err => console.log(err));
   }
@@ -64,6 +68,9 @@ const App = ()=> {
       })
     }).then(response => response.json())
       .then(result => {
+        if(!result.success){
+          throw result.error;
+        }
         const token = result.data.token;
         window.localStorage.setItem("token", token); //how to save token to local stroage in browser so the user is not logged out when they refresh.
           fetch('https://strangers-things.herokuapp.com/api/2209-FBT-ET-WEB-AM/users/me', {
